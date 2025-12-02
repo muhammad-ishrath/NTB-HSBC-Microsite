@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en" style="height: auto; min-height: 100%;">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Welcome to Nations Trust Bank - HSBC Customer Migration</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+body { font-family: 'Inter', sans-serif; }
+.smooth-scroll { scroll-behavior: smooth; }
+</style>
+</head>
+<body style="height: auto; min-height: 100%;" class="bg-gray-50 text-gray-900 smooth-scroll" x-data="{ 
+  currentLang: 'en',
+  searchQuery: '',
+  openFaq: null,
+  translations: {
+    en: {
+      nav: { home: 'Home', timeline: 'Timeline', faqs: 'FAQs', fees: 'Fees', products: 'Products', contact: 'Contact' },
+      hero: {
+        welcome: 'Welcome to Your New Banking Home',
+        subtitle: 'Seamless Transition from HSBC to Nations Trust Bank',
+        description: 'We are committed to making your transition smooth and hassle-free. Discover enhanced banking services, personalized solutions, and a dedicated team ready to serve you.',
+        cta1: 'View FAQs',
+        cta2: 'Fee Structures',
+        cta3: 'Digital Banking Guide'
+      },
+      timeline: {
+        title: 'Your Transition Roadmap',
+        subtitle: 'Key milestones in your journey to Nations Trust Bank',
+        stage1: { title: 'Announcement', date: 'January 2024', desc: 'Official migration announcement and customer communication' },
+        stage2: { title: 'Preparation', date: 'February 2024', desc: 'Account mapping and data migration preparation' },
+        stage3: { title: 'Migration', date: 'March 2024', desc: 'Seamless account transfer to NTB systems' },
+        stage4: { title: 'Completion', date: 'April 2024', desc: 'Full service activation and customer onboarding' },
+        benefits: 'Key Benefits',
+        benefit1: 'Seamless account transfer with no disruption',
+        benefit2: 'Enhanced digital banking experience',
+        benefit3: 'Dedicated relationship managers',
+        benefit4: 'Competitive fees and premium services'
+      },
+      faqs: {
+        title: 'Frequently Asked Questions',
+        search: 'Search FAQs...',
+        q1: 'Will my account number change?',
+        a1: 'Your account will be migrated to a new NTB account number. You will receive your new account details via email and SMS before the migration date.',
+        q2: 'What happens to my debit/credit cards?',
+        a2: 'New NTB cards will be issued and delivered to your registered address. Your existing HSBC cards will remain active until the new cards are activated.',
+        q3: 'Will my standing orders continue?',
+        a3: 'Yes, all standing orders will be automatically transferred. However, we recommend reviewing and updating them after migration.',
+        q4: 'How do I access digital banking?',
+        a4: 'You will receive digital banking credentials via secure channels. Our team will guide you through the setup process with step-by-step instructions.',
+        q5: 'What about my loan accounts?',
+        a5: 'All loan accounts will be transferred seamlessly. Terms and conditions remain unchanged, and you will continue your repayments without interruption.',
+        q6: 'Which branch should I visit?',
+        a6: 'Your nearest NTB branch will be communicated to you. You can also use our branch locator tool below to find the most convenient location.'
+      },
+      fees: {
+        title: 'Fee Comparison',
+        subtitle: 'Transparent pricing for your banking needs',
+        download: 'Download Full Fee Schedule',
+        service: 'Service',
+        hsbc: 'HSBC Fee',
+        ntb: 'NTB Fee',
+        savings: 'Savings Account Maintenance',
+        current: 'Current Account Maintenance',
+        debit: 'Debit Card Annual Fee',
+        credit: 'Credit Card Annual Fee',
+        transfer: 'Local Fund Transfer',
+        international: 'International Transfer'
+      },
+      private: {
+        title: 'Private Banking Excellence',
+        subtitle: 'Tailored wealth management for discerning clients',
+        feature1: 'Dedicated Relationship Manager',
+        feature1desc: 'Personalized service from experienced banking professionals',
+        feature2: 'Exclusive Investment Opportunities',
+        feature2desc: 'Access to premium investment products and advisory services',
+        feature3: 'Priority Banking Services',
+        feature3desc: 'Fast-track processing and exclusive lounge access',
+        feature4: 'Wealth Management Solutions',
+        feature4desc: 'Comprehensive portfolio management and estate planning',
+        cta: 'Explore Private Banking'
+      },
+      products: {
+        title: 'Our Banking Solutions',
+        subtitle: 'Comprehensive products for every financial need',
+        retail: 'Retail Banking',
+        retaildesc: 'Savings accounts, current accounts, and personal loans',
+        cards: 'Cards & Payments',
+        cardsdesc: 'Credit cards, debit cards, and digital payment solutions',
+        loans: 'Loans & Mortgages',
+        loansdesc: 'Home loans, personal loans, and vehicle financing',
+        investments: 'Investment Services',
+        investmentsdesc: 'Fixed deposits, mutual funds, and wealth management'
+      },
+      checklist: {
+        title: 'Action Checklist',
+        subtitle: 'Essential steps to complete your transition',
+        step1: 'Update standing orders and direct debits',
+        step2: 'Inform subscription services of new account details',
+        step3: 'Activate your new NTB debit and credit cards',
+        step4: 'Register for digital banking services',
+        step5: 'Update contact information in your profile',
+        step6: 'Review and confirm beneficiary details'
+      },
+      branches: {
+        title: 'Branch Locator & Support',
+        subtitle: 'Find your nearest NTB branch and get assistance',
+        phone: 'Customer Care',
+        email: 'Email Support',
+        hours: 'Operating Hours',
+        hoursdetail: 'Monday - Friday: 9:00 AM - 5:00 PM'
+      },
+      digital: {
+        title: 'Digital Banking Guide',
+        subtitle: 'Master your online and mobile banking experience',
+        step1: 'Download NTB Mobile App',
+        step1desc: 'Available on iOS and Android platforms',
+        step2: 'Register with Your Credentials',
+        step2desc: 'Use the credentials sent to your registered email',
+        step3: 'Set Up Security Features',
+        step3desc: 'Enable biometric login and transaction alerts',
+        step4: 'Explore Banking Features',
+        step4desc: 'Fund transfers, bill payments, and account management',
+        video: 'Watch Tutorial Video'
+      },
+      footer: {
+        terms: 'Terms & Conditions',
+        privacy: 'Privacy Policy',
+        copyright: '© 2024 Nations Trust Bank. All rights reserved.'
+      }
+    },
+    si: {
+      nav: { home: 'මුල් පිටුව', timeline: 'කාලසටහන', faqs: 'ප්‍රශ්න', fees: 'ගාස්තු', products: 'නිෂ්පාදන', contact: 'සම්බන්ධ වන්න' },
+      hero: {
+        welcome: 'ඔබේ නව බැංකු නිවසට සාදරයෙන් පිළිගනිමු',
+        subtitle: 'HSBC සිට Nations Trust Bank වෙත සුමට සංක්‍රමණය',
+        description: 'ඔබේ සංක්‍රමණය සුමට හා කරදරයකින් තොර කිරීමට අපි කැපවී සිටිමු. වැඩිදියුණු කළ බැංකු සේවා, පුද්ගලීකරණය කළ විසඳුම් සහ ඔබට සේවය කිරීමට සූදානම් කැපවූ කණ්ඩායමක් සොයා ගන්න.',
+        cta1: 'ප්‍රශ්න බලන්න',
+        cta2: 'ගාස්තු ව්‍යුහය',
+        cta3: 'ඩිජිටල් බැංකු මාර්ගෝපදේශය'
+      },
+      timeline: {
+        title: 'ඔබේ සංක්‍රමණ මාර්ග සිතියම',
+        subtitle: 'Nations Trust Bank වෙත ඔබේ ගමනේ ප්‍රධාන සන්ධිස්ථාන',
+        stage1: { title: 'නිවේදනය', date: 'ජනවාරි 2024', desc: 'නිල සංක්‍රමණ නිවේදනය සහ පාරිභෝගික සන්නිවේදනය' },
+        stage2: { title: 'සූදානම', date: 'පෙබරවාරි 2024', desc: 'ගිණුම් සිතියම්කරණය සහ දත්ත සංක්‍රමණ සූදානම' },
+        stage3: { title: 'සංක්‍රමණය', date: 'මාර්තු 2024', desc: 'NTB පද්ධති වෙත සුමට ගිණුම් මාරු කිරීම' },
+        stage4: { title: 'සම්පූර්ණ කිරීම', date: 'අප්‍රේල් 2024', desc: 'සම්පූර්ණ සේවා සක්‍රීය කිරීම සහ පාරිභෝගික ඇතුළත් කිරීම' },
+        benefits: 'ප්‍රධාන ප්‍රතිලාභ',
+        benefit1: 'බාධාවකින් තොරව සුමට ගිණුම් මාරු කිරීම',
+        benefit2: 'වැඩිදියුණු කළ ඩිජිටල් බැංකු අත්දැකීම',
+        benefit3: 'කැපවූ සම්බන්ධතා කළමනාකරුවන්',
+        benefit4: 'තරඟකාරී ගාස්තු සහ වාරික සේවා'
+      },
+      faqs: {
+        title: 'නිතර අසන ප්‍රශ්න',
+        search: 'ප්‍රශ්න සොයන්න...',
+        q1: 'මගේ ගිණුම් අංකය වෙනස් වේද?',
+        a1: 'ඔබේ ගිණුම නව NTB ගිණුම් අංකයකට සංක්‍රමණය වනු ඇත. සංක්‍රමණ දිනයට පෙර ඔබට ඊමේල් සහ SMS හරහා ඔබේ නව ගිණුම් විස්තර ලැබෙනු ඇත.',
+        q2: 'මගේ ඩෙබිට්/ක්‍රෙඩිට් කාඩ්පත් වලට කුමක් සිදුවේද?',
+        a2: 'නව NTB කාඩ්පත් නිකුත් කර ඔබේ ලියාපදිංචි ලිපිනයට භාර දෙනු ඇත. නව කාඩ්පත් සක්‍රිය වන තුරු ඔබේ පවතින HSBC කාඩ්පත් ක්‍රියාත්මක වනු ඇත.',
+        q3: 'මගේ ස්ථාවර නියෝග දිගටම පවතිනු ඇත්ද?',
+        a3: 'ඔව්, සියලුම ස්ථාවර නියෝග ස්වයංක්‍රීයව මාරු වනු ඇත. කෙසේ වෙතත්, සංක්‍රමණයෙන් පසු ඒවා සමාලෝචනය කර යාවත්කාලීන කිරීම අපි නිර්දේශ කරමු.',
+        q4: 'මම ඩිජිටල් බැංකුකරණයට ප්‍රවේශ වන්නේ කෙසේද?',
+        a4: 'ඔබට ආරක්ෂිත නාලිකා හරහා ඩිජිටල් බැංකු අක්තපත්‍ර ලැබෙනු ඇත. අපගේ කණ්ඩායම පියවරෙන් පියවර උපදෙස් සමඟ සැකසුම් ක්‍රියාවලිය හරහා ඔබට මඟ පෙන්වනු ඇත.',
+        q5: 'මගේ ණය ගිණුම් ගැන කුමක් කිව හැකිද?',
+        a5: 'සියලුම ණය ගිණුම් සුමටව මාරු වනු ඇත. නියම සහ කොන්දේසි වෙනස් නොවන අතර, ඔබ බාධාවකින් තොරව ඔබේ ආපසු ගෙවීම් දිගටම කරගෙන යනු ඇත.',
+        q6: 'මම කුමන ශාඛාවට පැමිණිය යුතුද?',
+        a6: 'ඔබට ආසන්නතම NTB ශාඛාව ඔබට දන්වනු ඇත. වඩාත් පහසු ස්ථානය සොයා ගැනීමට ඔබට පහත අපගේ ශාඛා සොයන්නා මෙවලම භාවිතා කළ හැකිය.'
+      },
+      fees: {
+        title: 'ගාස්තු සැසඳීම',
+        subtitle: 'ඔබේ බැංකු අවශ්‍යතා සඳහා විනිවිද පෙනෙන මිලකරණය',
+        download: 'සම්පූර්ණ ගාස්තු කාලසටහන බාගන්න',
+        service: 'සේවාව',
+        hsbc: 'HSBC ගාස්තුව',
+        ntb: 'NTB ගාස්තුව',
+        savings: 'ඉතිරි කිරීමේ ගිණුම් නඩත්තුව',
+        current: 'වත්මන් ගිණුම් නඩත්තුව',
+        debit: 'ඩෙබිට් කාඩ් වාර්ෂික ගාස්තුව',
+        credit: 'ක්‍රෙඩිට් කාඩ් වාර්ෂික ගාස්තුව',
+        transfer: 'දේශීය අරමුදල් මාරු කිරීම',
+        international: 'ජාත්‍යන්තර මාරු කිරීම'
+      },
+      private: {
+        title: 'පුද්ගලික බැංකු විශිෂ්ටත්වය',
+        subtitle: 'විචක්ෂණශීලී සේවාදායකයින් සඳහා සකස් කළ ධන කළමනාකරණය',
+        feature1: 'කැපවූ සම්බන්ධතා කළමනාකරු',
+        feature1desc: 'පළපුරුදු බැංකු වෘත්තිකයන්ගෙන් පුද්ගලීකරණය කළ සේවාව',
+        feature2: 'විශේෂ ආයෝජන අවස්ථා',
+        feature2desc: 'වාරික ආයෝජන නිෂ්පාදන සහ උපදේශන සේවා වෙත ප්‍රවේශය',
+        feature3: 'ප්‍රමුඛතා බැංකු සේවා',
+        feature3desc: 'වේගවත් ක්‍රියාකරණය සහ විශේෂ විවේකාගාර ප්‍රවේශය',
+        feature4: 'ධන කළමනාකරණ විසඳුම්',
+        feature4desc: 'විස්තීර්ණ කළඹ කළමනාකරණය සහ වතු සැලසුම්කරණය',
+        cta: 'පුද්ගලික බැංකුකරණය ගවේෂණය කරන්න'
+      },
+      products: {
+        title: 'අපගේ බැංකු විසඳුම්',
+        subtitle: 'සෑම මූල්‍ය අවශ්‍යතාවයක් සඳහාම විස්තීර්ණ නිෂ්පාදන',
+        retail: 'සිල්ලර බැංකුකරණය',
+        retaildesc: 'ඉතිරි කිරීමේ ගිණුම්, වත්මන් ගිණුම් සහ පුද්ගලික ණය',
+        cards: 'කාඩ්පත් සහ ගෙවීම්',
+        cardsdesc: 'ක්‍රෙඩිට් කාඩ්, ඩෙබිට් කාඩ් සහ ඩිජිටල් ගෙවීම් විසඳුම්',
+        loans: 'ණය සහ උකස්',
+        loansdesc: 'නිවාස ණය, පුද්ගලික ණය සහ වාහන මූල්‍යකරණය',
+        investments: 'ආයෝජන සේවා',
+        investmentsdesc: 'ස්ථාවර තැන්පතු, අන්‍යෝන්‍ය අරමුදල් සහ ධන කළමනාකරණය'
+      },
+      checklist: {
+        title: 'ක්‍රියාකාරී පරීක්ෂණ ලැයිස්තුව',
+        subtitle: 'ඔබේ සංක්‍රමණය සම්පූර්ණ කිරීමට අත්‍යවශ්‍ය පියවර',
+        step1: 'ස්ථාවර නියෝග සහ සෘජු ඩෙබිට් යාවත්කාලීන කරන්න',
+        step2: 'දායකත්ව සේවා වලට නව ගිණුම් විස්තර දන්වන්න',
+        step3: 'ඔබේ නව NTB ඩෙබිට් සහ ක්‍රෙඩිට් කාඩ්පත් සක්‍රිය කරන්න',
+        step4: 'ඩිජිටල් බැංකු සේවා සඳහා ලියාපදිංචි වන්න',
+        step5: 'ඔබේ පැතිකඩෙහි සම්බන්ධතා තොරතුරු යාවත්කාලීන කරන්න',
+        step6: 'ප්‍රතිලාභී විස්තර සමාලෝචනය කර තහවුරු කරන්න'
+      },
+      branches: {
+        title: 'ශාඛා සොයන්නා සහ සහාය',
+        subtitle: 'ඔබට ආසන්නතම NTB ශාඛාව සොයා ගෙන සහාය ලබා ගන්න',
+        phone: 'පාරිභෝගික සේවා',
+        email: 'ඊමේල් සහාය',
+        hours: 'ක්‍රියාත්මක වේලාවන්',
+        hoursdetail: 'සඳුදා - සිකුරාදා: පෙ.ව. 9:00 - ප.ව. 5:00'
+      },
+      digital: {
+        title: 'ඩිජිටල් බැංකු මාර්ගෝපදේශය',
+        subtitle: 'ඔබේ මාර්ගගත සහ ජංගම බැංකු අත්දැකීම ප්‍රගුණ කරන්න',
+        step1: 'NTB ජංගම යෙදුම බාගන්න',
+        step1desc: 'iOS සහ Android වේදිකා මත ලබා ගත හැකිය',
+        step2: 'ඔබේ අක්තපත්‍ර සමඟ ලියාපදිංචි වන්න',
+        step2desc: 'ඔබේ ලියාපදිංචි ඊමේල් වෙත යවන ලද අක්තපත්‍ර භාවිතා කරන්න',
+        step3: 'ආරක්ෂක විශේෂාංග සකසන්න',
+        step3desc: 'ජීව මිතික පිවිසුම සහ ගනුදෙනු ඇඟවීම් සක්‍රිය කරන්න',
+        step4: 'බැංකු විශේෂාංග ගවේෂණය කරන්න',
+        step4desc: 'අරමුදල් මාරු කිරීම්, බිල්පත් ගෙවීම් සහ ගිණුම් කළමනාකරණය',
+        video: 'නිබන්ධන වීඩියෝව නරඹන්න'
+      },
+      footer: {
+        terms: 'නියම සහ කොන්දේසි',
+        privacy: 'රහස්‍යතා ප්‍රතිපත්තිය',
+        copyright: '© 2024 Nations Trust Bank. සියලුම හිමිකම් ඇවිරිණි.'
+      }
+    },
+    ta: {
+      nav: { home: 'முகப்பு', timeline: 'காலவரிசை', faqs: 'கேள்விகள்', fees: 'கட்டணங்கள்', products: 'தயாரிப்புகள்', contact: 'தொடர்பு' },
+      hero: {
+        welcome: 'உங்கள் புதிய வங்கி இல்லத்திற்கு வரவேற்கிறோம்',
+        subtitle: 'HSBC இலிருந்து Nations Trust Bank க்கு சீரான மாற்றம்',
+        description: 'உங்கள் மாற்றத்தை சீராகவும் தொந்தரவு இல்லாமலும் செய்ய நாங்கள் உறுதிபூண்டுள்ளோம். மேம்படுத்தப்பட்ட வங்கி சேவைகள், தனிப்பயனாக்கப்பட்ட தீர்வுகள் மற்றும் உங்களுக்கு சேவை செய்ய தயாராக உள்ள அர்ப்பணிப்புள்ள குழுவைக் கண்டறியுங்கள்.',
+        cta1: 'கேள்விகளைப் பார்க்கவும்',
+        cta2: 'கட்டண கட்டமைப்புகள்',
+        cta3: 'டிஜிட்டல் வங்கி வழிகாட்டி'
+      },
+      timeline: {
+        title: 'உங்கள் மாற்ற வழித்தடம்',
+        subtitle: 'Nations Trust Bank க்கு உங்கள் பயணத்தின் முக்கிய மைல்கற்கள்',
+        stage1: { title: 'அறிவிப்பு', date: 'ஜனவரி 2024', desc: 'அதிகாரப்பூர்வ இடம்பெயர்வு அறிவிப்பு மற்றும் வாடிக்கையாளர் தொடர்பு' },
+        stage2: { title: 'தயாரிப்பு', date: 'பிப்ரவரி 2024', desc: 'கணக்கு வரைபடம் மற்றும் தரவு இடம்பெயர்வு தயாரிப்பு' },
+        stage3: { title: 'இடம்பெயர்வு', date: 'மார்ச் 2024', desc: 'NTB அமைப்புகளுக்கு சீரான கணக்கு பரிமாற்றம்' },
+        stage4: { title: 'நிறைவு', date: 'ஏப்ரல் 2024', desc: 'முழு சேவை செயல்படுத்தல் மற்றும் வாடிக்கையாளர் சேர்க்கை' },
+        benefits: 'முக்கிய நன்மைகள்',
+        benefit1: 'இடையூறு இல்லாமல் சீரான கணக்கு பரிமாற்றம்',
+        benefit2: 'மேம்படுத்தப்பட்ட டிஜிட்டல் வங்கி அனுபவம்',
+        benefit3: 'அர்ப்பணிப்புள்ள உறவு மேலாளர்கள்',
+        benefit4: 'போட்டி கட்டணங்கள் மற்றும் பிரீமியம் சேவைகள்'
+      },
+      faqs: {
+        title: 'அடிக்கடி கேட்கப்படும் கேள்விகள்',
+        search: 'கேள்விகளைத் தேடுங்கள்...',
+        q1: 'எனது கணக்கு எண் மாறுமா?',
+        a1: 'உங்கள் கணக்கு புதிய NTB கணக்கு எண்ணுக்கு இடம்பெயர்க்கப்படும். இடம்பெயர்வு தேதிக்கு முன் மின்னஞ்சல் மற்றும் SMS மூலம் உங்கள் புதிய கணக்கு விவரங்களைப் பெறுவீர்கள்.',
+        q2: 'எனது டெபிட்/கிரெடிட் அட்டைகளுக்கு என்ன நடக்கும்?',
+        a2: 'புதிய NTB அட்டைகள் வழங்கப்பட்டு உங்கள் பதிவு செய்யப்பட்ட முகவரிக்கு வழங்கப்படும். புதிய அட்டைகள் செயல்படுத்தப்படும் வரை உங்கள் தற்போதைய HSBC அட்டைகள் செயலில் இருக்கும்.',
+        q3: 'எனது நிலையான ஆணைகள் தொடருமா?',
+        a3: 'ஆம், அனைத்து நிலையான ஆணைகளும் தானாகவே மாற்றப்படும். இருப்பினும், இடம்பெயர்வுக்குப் பிறகு அவற்றை மதிப்பாய்வு செய்து புதுப்பிக்குமாறு நாங்கள் பரிந்துரைக்கிறோம்.',
+        q4: 'நான் டிஜிட்டல் வங்கியை எவ்வாறு அணுகுவது?',
+        a4: 'பாதுகாப்பான சேனல்கள் மூலம் டிஜிட்டல் வங்கி நற்சான்றிதழ்களைப் பெறுவீர்கள். படிப்படியான வழிமுறைகளுடன் அமைவு செயல்முறையின் மூலம் எங்கள் குழு உங்களுக்கு வழிகாட்டும்.',
+        q5: 'எனது கடன் கணக்குகள் பற்றி என்ன?',
+        a5: 'அனைத்து கடன் கணக்குகளும் சீராக மாற்றப்படும். விதிமுறைகள் மற்றும் நிபந்தனைகள் மாறாமல் இருக்கும், மேலும் நீங்கள் இடையூறு இல்லாமல் உங்கள் திருப்பிச் செலுத்துதல்களைத் தொடர்வீர்கள்.',
+        q6: 'நான் எந்த கிளையை பார்வையிட வேண்டும்?',
+        a6: 'உங்களுக்கு அருகிலுள்ள NTB கிளை உங்களுக்கு தெரிவிக்கப்படும். மிகவும் வசதியான இடத்தைக் கண்டறிய கீழே உள்ள எங்கள் கிளை கண்டுபிடிப்பாளர் கருவியையும் பயன்படுத்தலாம்.'
+      },
+      fees: {
+        title: 'கட்டண ஒப்பீடு',
+        subtitle: 'உங்கள் வங்கி தேவைகளுக்கு வெளிப்படையான விலை நிர்ணயம்',
+        download: 'முழு கட்டண அட்டவணையைப் பதிவிறக்கவும்',
+        service: 'சேவை',
+        hsbc: 'HSBC கட்டணம்',
+        ntb: 'NTB கட்டணம்',
+        savings: 'சேமிப்பு கணக்கு பராமரிப்பு',
+        current: 'தற்போதைய கணக்கு பராமரிப்பு',
+        debit: 'டெபிட் அட்டை வருடாந்திர கட்டணம்',
+        credit: 'கிரெடிட் அட்டை வருடாந்திர கட்டணம்',
+        transfer: 'உள்ளூர் நிதி பரிமாற்றம்',
+        international: 'சர்வதேச பரிமாற்றம்'
+      },
+      private: {
+        title: 'தனியார் வங்கி சிறப்பு',
+        subtitle: 'விவேகமான வாடிக்கையாளர்களுக்கு தனிப்பயனாக்கப்பட்ட செல்வ மேலாண்மை',
+        feature1: 'அர்ப்பணிப்புள்ள உறவு மேலாளர்',
+        feature1desc: 'அனுபவமிக்க வங்கி நிபுணர்களிடமிருந்து தனிப்பயனாக்கப்பட்ட சேவை',
+        feature2: 'பிரத்யேக முதலீட்டு வாய்ப்புகள்',
+        feature2desc: 'பிரீமியம் முதலீட்டு தயாரிப்புகள் மற்றும் ஆலோசனை சேவைகளுக்கான அணுகல்',
+        feature3: 'முன்னுரிமை வங்கி சேவைகள்',
+        feature3desc: 'விரைவான செயலாக்கம் மற்றும் பிரத்யேக லவுஞ்ச் அணுகல்',
+        feature4: 'செல்வ மேலாண்மை தீர்வுகள்',
+        feature4desc: 'விரிவான போர்ட்ஃபோலியோ மேலாண்மை மற்றும் எஸ்டேட் திட்டமிடல்',
+        cta: 'தனியார் வங்கியை ஆராயுங்கள்'
+      },
+      products: {
+        title: 'எங்கள் வங்கி தீர்வுகள்',
+        subtitle: 'ஒவ்வொரு நிதி தேவைக்கும் விரிவான தயாரிப்புகள்',
+        retail: 'சில்லறை வங்கி',
+        retaildesc: 'சேமிப்பு கணக்குகள், தற்போதைய கணக்குகள் மற்றும் தனிப்பட்ட கடன்கள்',
+        cards: 'அட்டைகள் மற்றும் பணம் செலுத்துதல்கள்',
+        cardsdesc: 'கிரெடிட் அட்டைகள், டெபிட் அட்டைகள் மற்றும் டிஜிட்டல் பணம் செலுத்தும் தீர்வுகள்',
+        loans: 'கடன்கள் மற்றும் அடமானங்கள்',
+        loansdesc: 'வீட்டு கடன்கள், தனிப்பட்ட கடன்கள் மற்றும் வாகன நிதியளிப்பு',
+        investments: 'முதலீட்டு சேவைகள்',
+        investmentsdesc: 'நிலையான வைப்புத்தொகைகள், பரஸ்பர நிதிகள் மற்றும் செல்வ மேலாண்மை'
+      },
+      checklist: {
+        title: 'செயல் சரிபார்ப்பு பட்டியல்',
+        subtitle: 'உங்கள் மாற்றத்தை முடிக்க அத்தியாவசிய படிகள்',
+        step1: 'நிலையான ஆணைகள் மற்றும் நேரடி பற்றுகளை புதுப்பிக்கவும்',
+        step2: 'சந்தா சேவைகளுக்கு புதிய கணக்கு விவரங்களை தெரிவிக்கவும்',
+        step3: 'உங்கள் புதிய NTB டெபிட் மற்றும் கிரெடிட் அட்டைகளை செயல்படுத்தவும்',
+        step4: 'டிஜிட்டல் வங்கி சேவைகளுக்கு பதிவு செய்யவும்',
+        step5: 'உங்கள் சுயவிவரத்தில் தொடர்பு தகவலை புதுப்பிக்கவும்',
+        step6: 'பயனாளி விவரங்களை மதிப்பாய்வு செய்து உறுதிப்படுத்தவும்'
+      },
+      branches: {
+        title: 'கிளை கண்டுபிடிப்பாளர் மற்றும் ஆதரவு',
+        subtitle: 'உங்களுக்கு அருகிலுள்ள NTB கிளையைக் கண்டறிந்து உதவி பெறுங்கள்',
+        phone: 'வாடிக்கையாளர் பராமரிப்பு',
+        email: 'மின்னஞ்சல் ஆதரவு',
+        hours: 'இயக்க நேரங்கள்',
+        hoursdetail: 'திங்கள் - வெள்ளி: காலை 9:00 - மாலை 5:00'
+      },
+      digital: {
+        title: 'டிஜிட்டல் வங்கி வழிகாட்டி',
+        subtitle: 'உங்கள் ஆன்லைன் மற்றும் மொபைல் வங்கி அனுபவத்தை மாஸ்டர் செய்யுங்கள்',
+        step1: 'NTB மொபைல் பயன்பாட்டைப் பதிவிறக்கவும்',
+        step1desc: 'iOS மற்றும் Android தளங்களில் கிடைக்கிறது',
+        step2: 'உங்கள் நற்சான்றிதழ்களுடன் பதிவு செய்யவும்',
+        step2desc: 'உங்கள் பதிவு செய்யப்பட்ட மின்னஞ்சலுக்கு அனுப்பப்பட்ட நற்சான்றிதழ்களைப் பயன்படுத்தவும்',
+        step3: 'பாதுகாப்பு அம்சங்களை அமைக்கவும்',
+        step3desc: 'பயோமெட்ரிக் உள்நுழைவு மற்றும் பரிவர்த்தனை எச்சரிக்கைகளை இயக்கவும்',
+        step4: 'வங்கி அம்சங்களை ஆராயுங்கள்',
+        step4desc: 'நிதி பரிமாற்றங்கள், பில் பணம் செலுத்துதல்கள் மற்றும் கணக்கு மேலாண்மை',
+        video: 'பயிற்சி வீடியோவைப் பார்க்கவும்'
+      },
+      footer: {
+        terms: 'விதிமுறைகள் மற்றும் நிபந்தனைகள்',
+        privacy: 'தனியுரிமை கொள்கை',
+        copyright: '© 2024 Nations Trust Bank. அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.'
+      }
+    }
+  },
+  get t() {
+    return this.translations[this.currentLang];
+  }
+}">
+
+<header class="bg-white shadow-sm sticky top-0 z-50">
+<div class="max-w-7xl mx-auto px-6 py-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-3">
+<div class="w-12 h-12 bg-gradient-to-br from-blue-900 to-blue-700 rounded-lg flex items-center justify-center">
+<span class="text-white font-bold text-xl">NTB</span>
+</div>
+<div>
+<h1 class="text-xl font-bold text-gray-900">Nations Trust Bank</h1>
+<p class="text-xs text-gray-500">HSBC Customer Migration</p>
+</div>
+</div>
+<div class="flex items-center space-x-6">
+<nav class="hidden lg:flex items-center space-x-6">
+<a href="#hero" class="text-gray-700 hover:text-blue-900 font-medium transition" x-text="t.nav.home"></a>
+<a href="#timeline" class="text-gray-700 hover:text-blue-900 font-medium transition" x-text="t.nav.timeline"></a>
+<a href="#faqs" class="text-gray-700 hover:text-blue-900 font-medium transition" x-text="t.nav.faqs"></a>
+<a href="#fees" class="text-gray-700 hover:text-blue-900 font-medium transition" x-text="t.nav.fees"></a>
+<a href="#products" class="text-gray-700 hover:text-blue-900 font-medium transition" x-text="t.nav.products"></a>
+<a href="#contact" class="text-gray-700 hover:text-blue-900 font-medium transition" x-text="t.nav.contact"></a>
+</nav>
+<div class="flex items-center space-x-2 bg-gray-100 rounded-lg p-1">
+<button @click="currentLang = 'en'" :class="currentLang === 'en' ? 'bg-white shadow-sm' : 'bg-transparent'" class="px-3 py-1.5 rounded-md text-sm font-medium transition">EN</button>
+<button @click="currentLang = 'si'" :class="currentLang === 'si' ? 'bg-white shadow-sm' : 'bg-transparent'" class="px-3 py-1.5 rounded-md text-sm font-medium transition">සිං</button>
+<button @click="currentLang = 'ta'" :class="currentLang === 'ta' ? 'bg-white shadow-sm' : 'bg-transparent'" class="px-3 py-1.5 rounded-md text-sm font-medium transition">த</button>
+</div>
+</div>
+</div>
+</div>
+</header>
+
+<section id="hero" class="bg-gradient-to-br from-blue-50 via-white to-gray-50 py-24">
+<div class="max-w-7xl mx-auto px-6">
+<div class="grid lg:grid-cols-2 gap-16 items-center">
+<div class="space-y-8">
+<div class="inline-flex items-center px-4 py-2 bg-blue-100 text-blue-900 rounded-full text-sm font-semibold">
+<i class="fas fa-info-circle mr-2"></i>
+<span>Important Migration Information</span>
+</div>
+<h1 class="text-5xl lg:text-6xl font-bold text-gray-900 leading-tight" x-text="t.hero.welcome"></h1>
+<p class="text-2xl text-blue-900 font-semibold" x-text="t.hero.subtitle"></p>
+<p class="text-lg text-gray-600 leading-relaxed" x-text="t.hero.description"></p>
+<div class="flex flex-wrap gap-4">
+<a href="#faqs" class="inline-flex items-center px-6 py-3 bg-blue-900 text-white rounded-lg font-semibold hover:bg-blue-800 transition shadow-lg">
+<i class="fas fa-question-circle mr-2"></i>
+<span x-text="t.hero.cta1"></span>
+</a>
+<a href="#fees" class="inline-flex items-center px-6 py-3 bg-white text-blue-900 border-2 border-blue-900 rounded-lg font-semibold hover:bg-blue-50 transition">
+<i class="fas fa-file-invoice-dollar mr-2"></i>
+<span x-text="t.hero.cta2"></span>
+</a>
+<a href="#digital" class="inline-flex items-center px-6 py-3 bg-gray-100 text-gray-900 rounded-lg font-semibold hover:bg-gray-200 transition">
+<i class="fas fa-mobile-alt mr-2"></i>
+<span x-text="t.hero.cta3"></span>
+</a>
+</div>
+</div>
+<div class="relative">
+<img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=600&fit=crop" alt="Banking" class="rounded-2xl shadow-2xl">
+<div class="absolute -bottom-6 -left-6 bg-white p-6 rounded-xl shadow-xl">
+<div class="flex items-center space-x-4">
+<div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+<i class="fas fa-check text-green-600 text-xl"></i>
+</div>
+<div>
+<p class="text-sm text-gray-500">Migration Status</p>
+<p class="text-lg font-bold text-gray-900">On Track</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section id="timeline" class="py-20 bg-white">
+<div class="max-w-7xl mx-auto px-6">
+<div class="text-center mb-16">
+<h2 class="text-4xl font-bold text-gray-900 mb-4" x-text="t.timeline.title"></h2>
+<p class="text-xl text-gray-600" x-text="t.timeline.subtitle"></p>
+</div>
+<div class="grid lg:grid-cols-4 gap-8 mb-16">
+<div class="relative">
+<div class="bg-blue-900 text-white p-6 rounded-xl shadow-lg h-full">
+<div class="w-12 h-12 bg-white text-blue-900 rounded-full flex items-center justify-center font-bold text-xl mb-4">1</div>
+<h3 class="text-xl font-bold mb-2" x-text="t.timeline.stage1.title"></h3>
+<p class="text-blue-100 text-sm mb-3" x-text="t.timeline.stage1.date"></p>
+<p class="text-blue-50" x-text="t.timeline.stage1.desc"></p>
+</div>
+<div class="hidden lg:block absolute top-1/2 -right-4 w-8 h-0.5 bg-blue-300"></div>
+</div>
+<div class="relative">
+<div class="bg-gray-100 p-6 rounded-xl shadow-lg h-full border-2 border-blue-900">
+<div class="w-12 h-12 bg-blue-900 text-white rounded-full flex items-center justify-center font-bold text-xl mb-4">2</div>
+<h3 class="text-xl font-bold mb-2 text-gray-900" x-text="t.timeline.stage2.title"></h3>
+<p class="text-blue-900 text-sm mb-3 font-semibold" x-text="t.timeline.stage2.date"></p>
+<p class="text-gray-700" x-text="t.timeline.stage2.desc"></p>
+</div>
+<div class="hidden lg:block absolute top-1/2 -right-4 w-8 h-0.5 bg-blue-300"></div>
+</div>
+<div class="relative">
+<div class="bg-gray-50 p-6 rounded-xl shadow-lg h-full border border-gray-300">
+<div class="w-12 h-12 bg-gray-300 text-gray-700 rounded-full flex items-center justify-center font-bold text-xl mb-4">3</div>
+<h3 class="text-xl font-bold mb-2 text-gray-900" x-text="t.timeline.stage3.title"></h3>
+<p class="text-gray-600 text-sm mb-3" x-text="t.timeline.stage3.date"></p>
+<p class="text-gray-600" x-text="t.timeline.stage3.desc"></p>
+</div>
+<div class="hidden lg:block absolute top-1/2 -right-4 w-8 h-0.5 bg-gray-300"></div>
+</div>
+<div class="bg-gray-50 p-6 rounded-xl shadow-lg h-full border border-gray-300">
+<div class="w-12 h-12 bg-gray-300 text-gray-700 rounded-full flex items-center justify-center font-bold text-xl mb-4">4</div>
+<h3 class="text-xl font-bold mb-2 text-gray-900" x-text="t.timeline.stage4.title"></h3>
+<p class="text-gray-600 text-sm mb-3" x-text="t.timeline.stage4.date"></p>
+<p class="text-gray-600" x-text="t.timeline.stage4.desc"></p>
+</div>
+</div>
+<div class="bg-gradient-to-r from-blue-900 to-blue-700 text-white p-8 rounded-2xl shadow-xl">
+<h3 class="text-2xl font-bold mb-6" x-text="t.timeline.benefits"></h3>
+<div class="grid md:grid-cols-2 gap-4">
+<div class="flex items-start space-x-3">
+<i class="fas fa-check-circle text-green-300 text-xl mt-1"></i>
+<p x-text="t.timeline.benefit1"></p>
+</div>
+<div class="flex items-start space-x-3">
+<i class="fas fa-check-circle text-green-300 text-xl mt-1"></i>
+<p x-text="t.timeline.benefit2"></p>
+</div>
+<div class="flex items-start space-x-3">
+<i class="fas fa-check-circle text-green-300 text-xl mt-1"></i>
+<p x-text="t.timeline.benefit3"></p>
+</div>
+<div class="flex items-start space-x-3">
+<i class="fas fa-check-circle text-green-300 text-xl mt-1"></i>
+<p x-text="t.timeline.benefit4"></p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section id="faqs" class="py-20 bg-gray-50">
+<div class="max-w-4xl mx-auto px-6">
+<div class="text-center mb-12">
+<h2 class="text-4xl font-bold text-gray-900 mb-4" x-text="t.faqs.title"></h2>
+<div class="relative max-w-xl mx-auto">
+<input type="text" x-model="searchQuery" :placeholder="t.faqs.search" class="w-full px-6 py-4 rounded-xl border-2 border-gray-300 focus:border-blue-900 focus:outline-none text-lg">
+<i class="fas fa-search absolute right-6 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+</div>
+</div>
+<div class="space-y-4">
+<div class="bg-white rounded-xl shadow-md overflow-hidden">
+<button @click="openFaq = openFaq === 1 ? null : 1" class="w-full px-6 py-5 flex items-center justify-between hover:bg-gray-50 transition">
+<span class="text-lg font-semibold text-gray-900 text-left" x-text="t.faqs.q1"></span>
+<i class="fas fa-chevron-down transition-transform" :class="openFaq === 1 ? 'transform rotate-180' : ''"></i>
+</button>
+<div x-show="openFaq === 1" x-collapse class="px-6 pb-5">
+<p class="text-gray-700" x-text="t.faqs.a1"></p>
+</div>
+</div>
+<div class="bg-white rounded-xl shadow-md overflow-hidden">
+<button @click="openFaq = openFaq === 2 ? null : 2" class="w-full px-6 py-5 flex items-center justify-between hover:bg-gray-50 transition">
+<span class="text-lg font-semibold text-gray-900 text-left" x-text="t.faqs.q2"></span>
+<i class="fas fa-chevron-down transition-transform" :class="openFaq === 2 ? 'transform rotate-180' : ''"></i>
+</button>
+<div x-show="openFaq === 2" x-collapse class="px-6 pb-5">
+<p class="text-gray-700" x-text="t.faqs.a2"></p>
+</div>
+</div>
+<div class="bg-white rounded-xl shadow-md overflow-hidden">
+<button @click="openFaq = openFaq === 3 ? null : 3" class="w-full px-6 py-5 flex items-center justify-between hover:bg-gray-50 transition">
+<span class="text-lg font-semibold text-gray-900 text-left" x-text="t.faqs.q3"></span>
+<i class="fas fa-chevron-down transition-transform" :class="openFaq === 3 ? 'transform rotate-180' : ''"></i>
+</button>
+<div x-show="openFaq === 3" x-collapse class="px-6 pb-5">
+<p class="text-gray-700" x-text="t.faqs.a3"></p>
+</div>
+</div>
+<div class="bg-white rounded-xl shadow-md overflow-hidden">
+<button @click="openFaq = openFaq === 4 ? null : 4" class="w-full px-6 py-5 flex items-center justify-between hover:bg-gray-50 transition">
+<span class="text-lg font-semibold text-gray-900 text-left" x-text="t.faqs.q4"></span>
+<i class="fas fa-chevron-down transition-transform" :class="openFaq === 4 ? 'transform rotate-180' : ''"></i>
+</button>
+<div x-show="openFaq === 4" x-collapse class="px-6 pb-5">
+<p class="text-gray-700" x-text="t.faqs.a4"></p>
+</div>
+</div>
+<div class="bg-white rounded-xl shadow-md overflow-hidden">
+<button @click="openFaq = openFaq === 5 ? null : 5" class="w-full px-6 py-5 flex items-center justify-between hover:bg-gray-50 transition">
+<span class="text-lg font-semibold text-gray-900 text-left" x-text="t.faqs.q5"></span>
+<i class="fas fa-chevron-down transition-transform" :class="openFaq === 5 ? 'transform rotate-180' : ''"></i>
+</button>
+<div x-show="openFaq === 5" x-collapse class="px-6 pb-5">
+<p class="text-gray-700" x-text="t.faqs.a5"></p>
+</div>
+</div>
+<div class="bg-white rounded-xl shadow-md overflow-hidden">
+<button @click="openFaq = openFaq === 6 ? null : 6" class="w-full px-6 py-5 flex items-center justify-between hover:bg-gray-50 transition">
+<span class="text-lg font-semibold text-gray-900 text-left" x-text="t.faqs.q6"></span>
+<i class="fas fa-chevron-down transition-transform" :class="openFaq === 6 ? 'transform rotate-180' : ''"></i>
+</button>
+<div x-show="openFaq === 6" x-collapse class="px-6 pb-5">
+<p class="text-gray-700" x-text="t.faqs.a6"></p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section id="fees" class="py-20 bg-white">
+<div class="max-w-6xl mx-auto px-6">
+<div class="text-center mb-12">
+<h2 class="text-4xl font-bold text-gray-900 mb-4" x-text="t.fees.title"></h2>
+<p class="text-xl text-gray-600 mb-6" x-text="t.fees.subtitle"></p>
+<button class="inline-flex items-center px-6 py-3 bg-blue-900 text-white rounded-lg font-semibold hover:bg-blue-800 transition shadow-lg">
+<i class="fas fa-download mr-2"></i>
+<span x-text="t.fees.download"></span>
+</button>
+</div>
+<div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200">
+<div class="overflow-x-auto">
+<table class="w-full">
+<thead class="bg-blue-900 text-white">
+<tr>
+<th class="px-6 py-4 text-left font-semibold" x-text="t.fees.service"></th>
+<th class="px-6 py-4 text-center font-semibold" x-text="t.fees.hsbc"></th>
+<th class="px-6 py-4 text-center font-semibold" x-text="t.fees.ntb"></th>
+<th class="px-6 py-4 text-center font-semibold">Change</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-gray-200">
+<tr class="hover:bg-gray-50">
+<td class="px-6 py-4 font-medium text-gray-900" x-text="t.fees.savings"></td>
+<td class="px-6 py-4 text-center text-gray-700">LKR 500/month</td>
+<td class="px-6 py-4 text-center text-gray-700">LKR 400/month</td>
+<td class="px-6 py-4 text-center"><span class="inline-flex items-center px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-semibold"><i class="fas fa-arrow-down mr-1"></i>20% Lower</span></td>
+</tr>
+<tr class="hover:bg-gray-50">
+<td class="px-6 py-4 font-medium text-gray-900" x-text="t.fees.current"></td>
+<td class="px-6 py-4 text-center text-gray-700">LKR 750/month</td>
+<td class="px-6 py-4 text-center text-gray-700">LKR 600/month</td>
+<td class="px-6 py-4 text-center"><span class="inline-flex items-center px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-semibold"><i class="fas fa-arrow-down mr-1"></i>20% Lower</span></td>
+</tr>
+<tr class="hover:bg-gray-50">
+<td class="px-6 py-4 font-medium text-gray-900" x-text="t.fees.debit"></td>
+<td class="px-6 py-4 text-center text-gray-700">LKR 1,500</td>
+<td class="px-6 py-4 text-center text-gray-700">LKR 1,200</td>
+<td class="px-6 py-4 text-center"><span class="inline-flex items-center px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-semibold"><i class="fas fa-arrow-down mr-1"></i>20% Lower</span></td>
+</tr>
+<tr class="hover:bg-gray-50">
+<td class="px-6 py-4 font-medium text-gray-900" x-text="t.fees.credit"></td>
+<td class="px-6 py-4 text-center text-gray-700">LKR 3,000</td>
+<td class="px-6 py-4 text-center text-gray-700">LKR 2,500</td>
+<td class="px-6 py-4 text-center"><span class="inline-flex items-center px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-semibold"><i class="fas fa-arrow-down mr-1"></i>17% Lower</span></td>
+</tr>
+<tr class="hover:bg-gray-50">
+<td class="px-6 py-4 font-medium text-gray-900" x-text="t.fees.transfer"></td>
+<td class="px-6 py-4 text-center text-gray-700">LKR 50</td>
+<td class="px-6 py-4 text-center text-gray-700">LKR 25</td>
+<td class="px-6 py-4 text-center"><span class="inline-flex items-center px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-semibold"><i class="fas fa-arrow-down mr-1"></i>50% Lower</span></td>
+</tr>
+<tr class="hover:bg-gray-50">
+<td class="px-6 py-4 font-medium text-gray-900" x-text="t.fees.international"></td>
+<td class="px-6 py-4 text-center text-gray-700">LKR 2,500</td>
+<td class="px-6 py-4 text-center text-gray-700">LKR 2,500</td>
+<td class="px-6 py-4 text-center"><span class="inline-flex items-center px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-semibold">Same</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+
+<section id="private-banking" class="py-20 bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900 text-white">
+<div class="max-w-7xl mx-auto px-6">
+<div class="text-center mb-16">
+<div class="inline-flex items-center px-4 py-2 bg-white bg-opacity-20 rounded-full text-sm font-semibold mb-4">
+<i class="fas fa-crown mr-2"></i>
+<span>Premium Banking</span>
+</div>
+<h2 class="text-5xl font-bold mb-4" x-text="t.private.title"></h2>
+<p class="text-xl text-blue-100" x-text="t.private.subtitle"></p>
+</div>
+<div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+<div class="bg-white bg-opacity-10 backdrop-blur-lg p-8 rounded-2xl border border-white border-opacity-20 hover:bg-opacity-20 transition">
+<div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mb-6">
+<i class="fas fa-user-tie text-3xl"></i>
+</div>
+<h3 class="text-xl font-bold mb-3" x-text="t.private.feature1"></h3>
+<p class="text-blue-100" x-text="t.private.feature1desc"></p>
+</div>
+<div class="bg-white bg-opacity-10 backdrop-blur-lg p-8 rounded-2xl border border-white border-opacity-20 hover:bg-opacity-20 transition">
+<div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mb-6">
+<i class="fas fa-chart-line text-3xl"></i>
+</div>
+<h3 class="text-xl font-bold mb-3" x-text="t.private.feature2"></h3>
+<p class="text-blue-100" x-text="t.private.feature2desc"></p>
+</div>
+<div class="bg-white bg-opacity-10 backdrop-blur-lg p-8 rounded-2xl border border-white border-opacity-20 hover:bg-opacity-20 transition">
+<div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mb-6">
+<i class="fas fa-star text-3xl"></i>
+</div>
+<h3 class="text-xl font-bold mb-3" x-text="t.private.feature3"></h3>
+<p class="text-blue-100" x-text="t.private.feature3desc"></p>
+</div>
+<div class="bg-white bg-opacity-10 backdrop-blur-lg p-8 rounded-2xl border border-white border-opacity-20 hover:bg-opacity-20 transition">
+<div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mb-6">
+<i class="fas fa-briefcase text-3xl"></i>
+</div>
+<h3 class="text-xl font-bold mb-3" x-text="t.private.feature4"></h3>
+<p class="text-blue-100" x-text="t.private.feature4desc"></p>
+</div>
+</div>
+<div class="text-center">
+<button class="inline-flex items-center px-8 py-4 bg-white text-blue-900 rounded-xl font-bold text-lg hover:bg-gray-100 transition shadow-xl">
+<span x-text="t.private.cta"></span>
+<i class="fas fa-arrow-right ml-2"></i>
+</button>
+</div>
+</div>
+</section>
+
+<section id="products" class="py-20 bg-gray-50">
+<div class="max-w-7xl mx-auto px-6">
+<div class="text-center mb-16">
+<h2 class="text-4xl font-bold text-gray-900 mb-4" x-text="t.products.title"></h2>
+<p class="text-xl text-gray-600" x-text="t.products.subtitle"></p>
+</div>
+<div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+<div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition border-2 border-transparent hover:border-blue-900">
+<div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-6">
+<i class="fas fa-piggy-bank text-blue-900 text-3xl"></i>
+</div>
+<h3 class="text-xl font-bold text-gray-900 mb-3" x-text="t.products.retail"></h3>
+<p class="text-gray-600 mb-6" x-text="t.products.retaildesc"></p>
+<a href="#" class="inline-flex items-center text-blue-900 font-semibold hover:underline">
+<span>Learn More</span>
+<i class="fas fa-arrow-right ml-2"></i>
+</a>
+</div>
+<div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition border-2 border-transparent hover:border-blue-900">
+<div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-6">
+<i class="fas fa-credit-card text-blue-900 text-3xl"></i>
+</div>
+<h3 class="text-xl font-bold text-gray-900 mb-3" x-text="t.products.cards"></h3>
+<p class="text-gray-600 mb-6" x-text="t.products.cardsdesc"></p>
+<a href="#" class="inline-flex items-center text-blue-900 font-semibold hover:underline">
+<span>Learn More</span>
+<i class="fas fa-arrow-right ml-2"></i>
+</a>
+</div>
+<div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition border-2 border-transparent hover:border-blue-900">
+<div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-6">
+<i class="fas fa-home text-blue-900 text-3xl"></i>
+</div>
+<h3 class="text-xl font-bold text-gray-900 mb-3" x-text="t.products.loans"></h3>
+<p class="text-gray-600 mb-6" x-text="t.products.loansdesc"></p>
+<a href="#" class="inline-flex items-center text-blue-900 font-semibold hover:underline">
+<span>Learn More</span>
+<i class="fas fa-arrow-right ml-2"></i>
+</a>
+</div>
+<div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition border-2 border-transparent hover:border-blue-900">
+<div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-6">
+<i class="fas fa-chart-pie text-blue-900 text-3xl"></i>
+</div>
+<h3 class="text-xl font-bold text-gray-900 mb-3" x-text="t.products.investments"></h3>
+<p class="text-gray-600 mb-6" x-text="t.products.investmentsdesc"></p>
+<a href="#" class="inline-flex items-center text-blue-900 font-semibold hover:underline">
+<span>Learn More</span>
+<i class="fas fa-arrow-right ml-2"></i>
+</a>
+</div>
+</div>
+</div>
+</section>
+
+<section id="checklist" class="py-20 bg-white">
+<div class="max-w-4xl mx-auto px-6">
+<div class="text-center mb-12">
+<h2 class="text-4xl font-bold text-gray-900 mb-4" x-text="t.checklist.title"></h2>
+<p class="text-xl text-gray-600" x-text="t.checklist.subtitle"></p>
+</div>
+<div class="bg-gradient-to-br from-blue-50 to-white p-8 rounded-2xl shadow-xl border border-blue-100">
+<div class="space-y-4">
+<div class="flex items-start space-x-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition">
+<div class="flex-shrink-0 w-8 h-8 bg-blue-900 text-white rounded-full flex items-center justify-center font-bold">1</div>
+<div class="flex-1">
+<p class="text-gray-900 font-medium" x-text="t.checklist.step1"></p>
+</div>
+<input type="checkbox" class="w-6 h-6 text-blue-900 rounded focus:ring-blue-900">
+</div>
+<div class="flex items-start space-x-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition">
+<div class="flex-shrink-0 w-8 h-8 bg-blue-900 text-white rounded-full flex items-center justify-center font-bold">2</div>
+<div class="flex-1">
+<p class="text-gray-900 font-medium" x-text="t.checklist.step2"></p>
+</div>
+<input type="checkbox" class="w-6 h-6 text-blue-900 rounded focus:ring-blue-900">
+</div>
+<div class="flex items-start space-x-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition">
+<div class="flex-shrink-0 w-8 h-8 bg-blue-900 text-white rounded-full flex items-center justify-center font-bold">3</div>
+<div class="flex-1">
+<p class="text-gray-900 font-medium" x-text="t.checklist.step3"></p>
+</div>
+<input type="checkbox" class="w-6 h-6 text-blue-900 rounded focus:ring-blue-900">
+</div>
+<div class="flex items-start space-x-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition">
+<div class="flex-shrink-0 w-8 h-8 bg-blue-900 text-white rounded-full flex items-center justify-center font-bold">4</div>
+<div class="flex-1">
+<p class="text-gray-900 font-medium" x-text="t.checklist.step4"></p>
+</div>
+<input type="checkbox" class="w-6 h-6 text-blue-900 rounded focus:ring-blue-900">
+</div>
+<div class="flex items-start space-x-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition">
+<div class="flex-shrink-0 w-8 h-8 bg-blue-900 text-white rounded-full flex items-center justify-center font-bold">5</div>
+<div class="flex-1">
+<p class="text-gray-900 font-medium" x-text="t.checklist.step5"></p>
+</div>
+<input type="checkbox" class="w-6 h-6 text-blue-900 rounded focus:ring-blue-900">
+</div>
+<div class="flex items-start space-x-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition">
+<div class="flex-shrink-0 w-8 h-8 bg-blue-900 text-white rounded-full flex items-center justify-center font-bold">6</div>
+<div class="flex-1">
+<p class="text-gray-900 font-medium" x-text="t.checklist.step6"></p>
+</div>
+<input type="checkbox" class="w-6 h-6 text-blue-900 rounded focus:ring-blue-900">
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section id="contact" class="py-20 bg-gray-50">
+<div class="max-w-7xl mx-auto px-6">
+<div class="text-center mb-12">
+<h2 class="text-4xl font-bold text-gray-900 mb-4" x-text="t.branches.title"></h2>
+<p class="text-xl text-gray-600" x-text="t.branches.subtitle"></p>
+</div>
+<div class="grid lg:grid-cols-2 gap-12">
+<div class="bg-white p-8 rounded-2xl shadow-xl">
+<img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?w=800&h=600&fit=crop" alt="Branch Map" class="w-full h-96 object-cover rounded-xl mb-6">
+<div class="grid md:grid-cols-2 gap-6">
+<div class="flex items-start space-x-4">
+<div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+<i class="fas fa-phone text-blue-900 text-xl"></i>
+</div>
+<div>
+<p class="text-sm text-gray-500 mb-1" x-text="t.branches.phone"></p>
+<p class="text-lg font-bold text-gray-900">+94 11 244 8448</p>
+</div>
+</div>
+<div class="flex items-start space-x-4">
+<div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+<i class="fas fa-envelope text-blue-900 text-xl"></i>
+</div>
+<div>
+<p class="text-sm text-gray-500 mb-1" x-text="t.branches.email"></p>
+<p class="text-lg font-bold text-gray-900">support@ntb.lk</p>
+</div>
+</div>
+<div class="flex items-start space-x-4 md:col-span-2">
+<div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+<i class="fas fa-clock text-blue-900 text-xl"></i>
+</div>
+<div>
+<p class="text-sm text-gray-500 mb-1" x-text="t.branches.hours"></p>
+<p class="text-lg font-bold text-gray-900" x-text="t.branches.hoursdetail"></p>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-white p-8 rounded-2xl shadow-xl">
+<h3 class="text-2xl font-bold text-gray-900 mb-6">Find Your Nearest Branch</h3>
+<form class="space-y-4">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">Your Location</label>
+<input type="text" placeholder="Enter your city or postal code" class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:border-blue-900 focus:outline-none">
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">Service Type</label>
+<select class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:border-blue-900 focus:outline-none">
+<option>All Services</option>
+<option>Retail Banking</option>
+<option>Private Banking</option>
+<option>Corporate Banking</option>
+</select>
+</div>
+<button type="submit" class="w-full px-6 py-3 bg-blue-900 text-white rounded-lg font-semibold hover:bg-blue-800 transition shadow-lg">
+<i class="fas fa-search mr-2"></i>
+Search Branches
+</button>
+</form>
+<div class="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+<p class="text-sm text-blue-900"><i class="fas fa-info-circle mr-2"></i>Your nearest branch will be assigned based on your HSBC branch location.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section id="digital" class="py-20 bg-white">
+<div class="max-w-7xl mx-auto px-6">
+<div class="text-center mb-16">
+<h2 class="text-4xl font-bold text-gray-900 mb-4" x-text="t.digital.title"></h2>
+<p class="text-xl text-gray-600" x-text="t.digital.subtitle"></p>
+</div>
+<div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+<div class="text-center">
+<div class="w-20 h-20 bg-gradient-to-br from-blue-900 to-blue-700 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+<span class="text-white font-bold text-2xl">1</span>
+</div>
+<h3 class="text-xl font-bold text-gray-900 mb-3" x-text="t.digital.step1"></h3>
+<p class="text-gray-600" x-text="t.digital.step1desc"></p>
+</div>
+<div class="text-center">
+<div class="w-20 h-20 bg-gradient-to-br from-blue-900 to-blue-700 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+<span class="text-white font-bold text-2xl">2</span>
+</div>
+<h3 class="text-xl font-bold text-gray-900 mb-3" x-text="t.digital.step2"></h3>
+<p class="text-gray-600" x-text="t.digital.step2desc"></p>
+</div>
+<div class="text-center">
+<div class="w-20 h-20 bg-gradient-to-br from-blue-900 to-blue-700 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+<span class="text-white font-bold text-2xl">3</span>
+</div>
+<h3 class="text-xl font-bold text-gray-900 mb-3" x-text="t.digital.step3"></h3>
+<p class="text-gray-600" x-text="t.digital.step3desc"></p>
+</div>
+<div class="text-center">
+<div class="w-20 h-20 bg-gradient-to-br from-blue-900 to-blue-700 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+<span class="text-white font-bold text-2xl">4</span>
+</div>
+<h3 class="text-xl font-bold text-gray-900 mb-3" x-text="t.digital.step4"></h3>
+<p class="text-gray-600" x-text="t.digital.step4desc"></p>
+</div>
+</div>
+<div class="bg-gradient-to-r from-blue-900 to-blue-700 p-12 rounded-2xl shadow-2xl text-center text-white">
+<i class="fas fa-play-circle text-6xl mb-6"></i>
+<h3 class="text-3xl font-bold mb-4" x-text="t.digital.video"></h3>
+<p class="text-blue-100 mb-8 text-lg">Learn how to set up and use NTB Digital Banking in just 5 minutes</p>
+<button class="inline-flex items-center px-8 py-4 bg-white text-blue-900 rounded-xl font-bold text-lg hover:bg-gray-100 transition shadow-xl">
+<i class="fas fa-play mr-2"></i>
+<span>Watch Now</span>
+</button>
+</div>
+</div>
+</section>
+
+<footer class="bg-gray-900 text-white py-12">
+<div class="max-w-7xl mx-auto px-6">
+<div class="grid md:grid-cols-3 gap-8 mb-8">
+<div>
+<div class="flex items-center space-x-3 mb-4">
+<div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg flex items-center justify-center">
+<span class="text-white font-bold">NTB</span>
+</div>
+<span class="text-xl font-bold">Nations Trust Bank</span>
+</div>
+<p class="text-gray-400">Your trusted banking partner for a seamless transition and exceptional service.</p>
+</div>
+<div>
+<h4 class="text-lg font-bold mb-4">Quick Links</h4>
+<ul class="space-y-2">
+<li><a href="#timeline" class="text-gray-400 hover:text-white transition">Timeline</a></li>
+<li><a href="#faqs" class="text-gray-400 hover:text-white transition">FAQs</a></li>
+<li><a href="#fees" class="text-gray-400 hover:text-white transition">Fees</a></li>
+<li><a href="#products" class="text-gray-400 hover:text-white transition">Products</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-lg font-bold mb-4">Legal</h4>
+<ul class="space-y-2">
+<li><a href="#" class="text-gray-400 hover:text-white transition" x-text="t.footer.terms"></a></li>
+<li><a href="#" class="text-gray-400 hover:text-white transition" x-text="t.footer.privacy"></a></li>
+<li><a href="#" class="text-gray-400 hover:text-white transition">Terms (සිංහල)</a></li>
+<li><a href="#" class="text-gray-400 hover:text-white transition">Terms (தமிழ்)</a></li>
+</ul>
+</div>
+</div>
+<div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row items-center justify-between">
+<p class="text-gray-400 text-sm mb-4 md:mb-0" x-text="t.footer.copyright"></p>
+<div class="flex items-center space-x-6">
+<a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-facebook text-xl"></i></a>
+<a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-twitter text-xl"></i></a>
+<a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-linkedin text-xl"></i></a>
+<a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-instagram text-xl"></i></a>
+</div>
+</div>
+</div>
+</footer>
+
+</body>
+</html>
